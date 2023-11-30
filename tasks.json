@@ -1,0 +1,83 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Go: Escape analysis, leaking + escapes",
+            "type": "shell",
+            "command": "cd $(echo '${fileDirname}') && go build  -gcflags '-m=1 -l' 2>&1 | grep -E 'leaking param|moved to heap|escapes to heap' | while read line; do echo \"${relativeFileDirname}/${line}\"; done",
+            "problemMatcher": {
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+): (.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "message": 4
+                },
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}"
+                ]
+            }
+        },
+        {
+            "label": "Go: Escape analysis, escapes only",
+            "type": "shell",
+            "command": "cd $(echo '${fileDirname}') && go build  -gcflags '-m=1 -l' 2>&1 | grep -E 'moved to heap|escapes to heap' | while read line; do echo \"${relativeFileDirname}/${line}\"; done",
+            "problemMatcher": {
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+): (.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "message": 4
+                },
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}"
+                ]
+            }
+        },
+        {
+            "label": "Go: Escape analysis, detailed, for current file and line",
+            "type": "shell",
+            "command": "cd $(echo '${fileDirname}') && go build -gcflags '-m=3 -l' 2>&1 | grep '^[^:]*${fileBasename}:${lineNumber}:'",
+            "problemMatcher": {
+                "pattern": {
+                    "regexp": "$^",
+                },
+            }
+        },
+        {
+            "label": "Go: Profile current benchmark (memory)",
+            "type": "shell",
+            "command": "cd $(echo '${fileDirname}') && sed -n '${lineNumber}p' '${file}' | sed -n 's/func \\(.*\\)(.*/\\1/p' | xargs -I {} go test -bench=^{}$ -memprofile=mem.out -run='^$' && go tool pprof -http=:8080 mem.out",
+            "problemMatcher": {
+                "pattern": {
+                    "regexp": "$^",
+                },
+            }
+        },
+        {
+            "label": "Go: Profile current benchmark (cpu)",
+            "type": "shell",
+            "command": "cd $(echo '${fileDirname}') && sed -n '${lineNumber}p' '${file}' | sed -n 's/func \\(.*\\)(.*/\\1/p' | xargs -I {} go test -bench=^{}$ -cpuprofile=cpu.out -run='^$' && go tool pprof -http=:8080 cpu.out",
+            "problemMatcher": {
+                "pattern": {
+                    "regexp": "$^",
+                },
+            }
+        },
+        {
+            "label": "Environment",
+            "type": "shell",
+            "command": "echo workspaceFolder: '${workspaceFolder}', relativeFileDirname: '${relativeFileDirname}', fileDirname: '${fileDirname}', pwd: $(pwd)",
+            "problemMatcher": {
+                "pattern": {
+                    "regexp": "$^",
+                },
+            }
+        },
+    ]
+}
