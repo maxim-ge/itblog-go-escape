@@ -36,8 +36,12 @@ type Point struct {
 	X, Y int
 }
 
-func ReturnValueParamAddress(modevToHeap Point) *Point {
-	return &modevToHeap
+//go:noinline
+func ReturnValueParamAddress(escapesToHeap Point) *Point {
+	if escapesToHeap.X < 0 {
+		return nil
+	}
+	return &escapesToHeap
 }
 
 func ReturnPointerParam(leaking *Point) *Point {

@@ -34,6 +34,17 @@ func Benchmark_YIfLongest1_noinline(b *testing.B) {
 	}
 }
 
+func Benchmark_ReturnValueParamAddress(b *testing.B) {
+
+	p := Point{1, 2}
+	for i := 0; i < b.N; i++ {
+		l := ReturnValueParamAddress(p)
+		if l == nil {
+			b.Fail()
+		}
+	}
+}
+
 var closureCaller = func(f func() int) int {
 	return f()
 }
