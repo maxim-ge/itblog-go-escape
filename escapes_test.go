@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func Benchmark_YIfLongest1(b *testing.B) {
+func Benchmark_YIfLongest(b *testing.B) {
 	x := "x"
 	y := "y"
 	for i := 0; i < b.N; i++ {
@@ -23,7 +23,20 @@ func Benchmark_YIfLongest1(b *testing.B) {
 	}
 }
 
-func Benchmark_YIfLongest1_noinline(b *testing.B) {
+func Benchmark_YIfLongest1_array(b *testing.B) {
+
+	x := [5]string{"a", "ab", "abc", "abcd", "abcde"}
+	y := [5]string{"a", "ab", "abc", "abcd", "abcde"}
+
+	for i := 0; i < b.N; i++ {
+		l := YIfLongest(&x[i%len(x)], &y[i%len(y)])
+		if l == nil {
+			b.Fatal("l is nil")
+		}
+	}
+}
+
+func Benchmark_YIfLongest_noinline(b *testing.B) {
 	x := "x"
 	y := "y"
 	for i := 0; i < b.N; i++ {

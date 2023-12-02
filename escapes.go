@@ -15,6 +15,14 @@ import (
 	"unsafe"
 )
 
+//go:noinline
+func ReturnValueParamAddress(escapesToHeap Point) *Point {
+	if escapesToHeap.X < 0 {
+		return nil
+	}
+	return &escapesToHeap
+}
+
 func YIfLongest(x, y *string) *string {
 	if len(*y) > len(*x) {
 		return y
@@ -34,14 +42,6 @@ func YIfLongest_noinline(x, y *string) *string {
 
 type Point struct {
 	X, Y int
-}
-
-//go:noinline
-func ReturnValueParamAddress(escapesToHeap Point) *Point {
-	if escapesToHeap.X < 0 {
-		return nil
-	}
-	return &escapesToHeap
 }
 
 func ReturnPointerParam(leaking *Point) *Point {
@@ -118,7 +118,6 @@ func (c *Closure) ProvideFieldAsClosure(closureCaller func(func() int) int) int 
 
 func ReadInt64UsingBinaryRead(r io.Reader) (int64, error) {
 	var v int64
-	// escapes but optimized
 	err := binary.Read(r, binary.BigEndian, &v)
 	return v, err
 }
