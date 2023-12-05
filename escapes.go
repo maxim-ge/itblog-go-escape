@@ -62,9 +62,9 @@ func SliceLen(p []byte) int {
 	return len(p)
 }
 
-// ***** Leaking example **********************************************************************************************
+// ***** Leaking examples **********************************************************************************************
 
-// `a` escapes since it leaks on ReturnSlice()
+// `a` escapes to heap because of the ReturnSlice() leaking param
 func CallReturnSlice() {
 	a := make([]byte, 8)
 	fmt.Println(ReturnSlice(a))
