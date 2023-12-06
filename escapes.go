@@ -81,6 +81,7 @@ func CallReturnSlice() {
 // `a` is kept on the stack
 func CallSliceLen(f func([]byte) int) {
 	a := make([]byte, 8)
+	// Result of SliceLen(a) escapes to heap
 	fmt.Println(SliceLen(a))
 }
 
