@@ -23,10 +23,18 @@ func ReturnValueParamAddress(escapesToHeap Point) *Point {
 	return &escapesToHeap
 }
 
+func Slices() int {
+	doesNotEscape := make([]byte, 10000)
+	escapes := make([]byte, 100000)
+	return len(doesNotEscape) + len(escapes)
+}
+
+// `y`: leaking param
 func YIfLongest(x, y *string) *string {
 	if len(*y) > len(*x) {
 		return y
 	}
+	// `s`: escapes to heap
 	s := ""
 	return &s
 }

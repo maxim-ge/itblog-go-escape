@@ -24,7 +24,6 @@ func Benchmark_YIfLongest(b *testing.B) {
 }
 
 func Benchmark_YIfLongest1_array(b *testing.B) {
-
 	x := [5]string{"a", "ab", "abc", "abcd", "abcde"}
 	y := [5]string{"a", "ab", "abc", "abcd", "abcde"}
 

@@ -6,7 +6,7 @@
         {
             "label": "Go: Escape analysis, leaking + escapes",
             "type": "shell",
-            "command": "cd $(echo '${fileDirname}') && go build  -gcflags '-m=3 -l' 2>&1 | grep -E 'leaking param|escapes to heap' | while read line; do echo \"${relativeFileDirname}/${line}\"; done",
+            "command": "cd $(echo '${fileDirname}') && go build  -gcflags '-m=3 -l' 2>&1 | grep -E 'leaking param|escapes to heap' | while read -r line; do echo \"${relativeFileDirname}/${line}\"; done",
             "problemMatcher": {
                 "pattern": {
                     "regexp": "^(.*):(\\d+):(\\d+): (.*)$",
@@ -24,7 +24,7 @@
         {
             "label": "Go: Escape analysis, escapes only",
             "type": "shell",
-            "command": "cd $(echo '${fileDirname}') && go build  -gcflags '-m=1 -l' 2>&1 | grep -E 'moved to heap|escapes to heap' | while read line; do echo \"${relativeFileDirname}/${line}\"; done",
+            "command": "cd $(echo '${fileDirname}') && go build  -gcflags '-m=3 -l' 2>&1 | grep -E 'escapes to heap' | while read -r line; do echo \"${relativeFileDirname}/${line}\"; done",
             "problemMatcher": {
                 "pattern": {
                     "regexp": "^(.*):(\\d+):(\\d+): (.*)$",
@@ -45,8 +45,8 @@
             "command": "cd $(echo '${fileDirname}') && go build -gcflags '-m=3 -l' 2>&1 | grep '^[^:]*${fileBasename}:${lineNumber}:'",
             "problemMatcher": {
                 "pattern": {
-                    "regexp": "$^",
-                },
+                    "regexp": "$^"
+                }
             }
         },
         {
@@ -55,8 +55,8 @@
             "command": "cd $(echo '${fileDirname}') && sed -n '${lineNumber}p' '${file}' | sed -n 's/func \\(.*\\)(.*/\\1/p' | xargs -I {} go test -bench=^{}$ -memprofile=mem.out -run='^$' && go tool pprof -http=:8080 mem.out",
             "problemMatcher": {
                 "pattern": {
-                    "regexp": "$^",
-                },
+                    "regexp": "$^"
+                }
             }
         },
         {
@@ -65,8 +65,8 @@
             "command": "cd $(echo '${fileDirname}') && sed -n '${lineNumber}p' '${file}' | sed -n 's/func \\(.*\\)(.*/\\1/p' | xargs -I {} go test -bench=^{}$ -cpuprofile=cpu.out -run='^$' && go tool pprof -http=:8080 cpu.out",
             "problemMatcher": {
                 "pattern": {
-                    "regexp": "$^",
-                },
+                    "regexp": "$^"
+                }
             }
         },
         {
@@ -75,9 +75,9 @@
             "command": "echo workspaceFolder: '${workspaceFolder}', relativeFileDirname: '${relativeFileDirname}', fileDirname: '${fileDirname}', pwd: $(pwd)",
             "problemMatcher": {
                 "pattern": {
-                    "regexp": "$^",
-                },
+                    "regexp": "$^"
+                }
             }
-        },
+        }
     ]
 }
